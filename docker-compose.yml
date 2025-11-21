@@ -1,0 +1,60 @@
+version: "3.9"
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      ENABLE_BACKGROUND_SERVICE: "0"
+      ALLOW_ORIGINS: "*"
+      DB_PATH: "/app/data/btc_trader.db"
+      # Descomente e defina para produção:
+      # BINANCE_API_KEY: ${BINANCE_API_KEY}
+      # BINANCE_API_SECRET: ${BINANCE_API_SECRET}
+      # CRYPTOPANIC_API_KEY: ${CRYPTOPANIC_API_KEY}
+      # NEWSAPI_KEY: ${NEWSAPI_KEY}
+    volumes:
+      - db_data:/app/data
+      - logs:/app/logs
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ["python", "worker_service.py"]
+    environment:
+      BACKGROUND_INTERVAL: "30"
+      DB_PATH: "/app/data/btc_trader.db"
+      # BINANCE_API_KEY: ${BINANCE_API_KEY}
+      # BINANCE_API_SECRET: ${BINANCE_API_SECRET}
+      # CRYPTOPANIC_API_KEY: ${CRYPTOPANIC_API_KEY}
+      # NEWSAPI_KEY: ${NEWSAPI_KEY}
+    volumes:
+      - db_data:/app/data
+      - logs:/app/logs
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  web:
+    build:
+      context: ./web
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE: http://api:8000
+    environment:
+      NEXT_PUBLIC_API_BASE: http://api:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  db_data:
+  logs:
+

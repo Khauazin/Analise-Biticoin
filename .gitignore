@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+.pytest_cache/
+.mypy_cache/
+*.egg-info/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+
+# Environment/config files
+.env
+.env.*
+*.env
+
+# IDE/editor
+.vscode/
+.idea/
+
+# Logs and temp
+logs/
+*.log
+*.tmp
+
+# Databases and secrets
+*.db
+*.sqlite
+encryption_key.key

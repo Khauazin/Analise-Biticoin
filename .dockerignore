@@ -1,0 +1,15 @@
+venv/
+.venv/
+__pycache__/
+*.pyc
+.git/
+.gitignore
+logs/
+web/node_modules/
+web/.next/
+node_modules/
+*.log
+*.tmp
+Documentação/
+*.docx
+*.md~
